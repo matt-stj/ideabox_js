@@ -21,6 +21,7 @@ function fetchIdeas() {
 
   $.ajax({
     type:    "GET",
+    crossDomain: true,
     url:     "http://matts-idea-box-js.herokuapp.com/api/v1/ideas.json",
     success: function(ideas) {
       $.each(ideas, function(index, idea) {
