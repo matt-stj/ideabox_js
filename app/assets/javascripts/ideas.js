@@ -21,7 +21,8 @@ function fetchIdeas() {
 
   $.ajax({
     type:    "GET",
-    url:     "localhost:3000/api/v1/ideas.json",
+    crossDomain: true,
+    url:     "http://matts-idea-box-js.herokuapp.com/api/v1/ideas.json",
     success: function(ideas) {
       $.each(ideas, function(index, idea) {
         if (isNaN(newestItemID) || idea.id > newestItemID) {
