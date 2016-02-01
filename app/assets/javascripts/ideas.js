@@ -1,5 +1,5 @@
 $( "#fetch-ideas" ).click(function() {
-  renderIdea();
+  fetchIdeas();
 });
 
 function renderIdea(idea) {
@@ -14,4 +14,23 @@ function renderIdea(idea) {
     + "<button id='delete-idea' name='button-fetch' class='btn btn-default btn-xs'>Delete</button>"
     + "</div>"
     )
+}
+
+function fetchIdeas() {
+  var newestItemID = parseInt($(".idea").last().attr("data-id"))
+
+  $.ajax({
+    type:    "GET",
+    url:     "localhost:3000/api/v1/ideas.json",
+    success: function(ideas) {
+      $.each(ideas, function(index, idea) {
+        if (isNaN(newestItemID) || idea.id > newestItemID) {
+          renderIdea(idea)
+        }
+      })
+    },
+    error: function(xhr) {
+      console.log(xhr.responseText)
+    }
+  })
 }
