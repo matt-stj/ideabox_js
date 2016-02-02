@@ -196,9 +196,7 @@ function saveEditedIdea(idea) {
       url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
       data:    { _method:'PUT', updatedIdeaParams },
         success: function() {
-          var newQuality = getIdeaQuality($idea.attr('data-id'))
-          console.log(newQuality)
-          $($idea).find('.quality').text("Quality: " + newQuality)
+          console.log("successfully updated!")
         },
       error: function(xhr) {
         console.log(xhr.responseText)
