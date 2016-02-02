@@ -22,6 +22,7 @@ class Api::V1::IdeasController < ApplicationController
 
   def update
     @idea = Idea.find(params[:id])
+    binding.pry
     incoming_quality = params[:ideaParams][:idea][:quality].to_i
     @idea.increment!(incoming_quality)
     render :nothing => true

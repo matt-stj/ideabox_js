@@ -2,7 +2,10 @@ $(document).ready(function() {
   fetchIdeas();
   createIdea();
   deleteIdea();
+  editIdea();
+  saveEditedIdea();
   upgradeIdea();
+  downgradeIdea();
 })
 
 
@@ -10,16 +13,17 @@ function renderIdea(idea) {
   $("#latest-ideas").append(
     "<div class='idea' data-id='"
     + idea.id
-    + "'><h3>Title: "
+    + "'><h3 class='title'>Title: "
     + idea.title
-    + "</h3><h6>Body: "
+    + "</h3><h6 class='body'>Body: "
     + idea.body
     + "</h5><h6 class='quality' >Quality: "
     + idea.quality
     + "</h6><p>Posted at: "
     + idea.created_at
     + "</p>"
-    + "<button id='delete-idea' name='button-delete' class='btn btn-danger btn-xs'>Delete</button>"
+    + "<button id='delete-idea' name='button-delete' class='btn btn-danger'>Delete</button>"
+    + "<button id='edit-idea' name='button-idea' class='btn btn-warning'>Edit</button>"
     + "<button type='button' id='upgrade-idea' class='btn btn-default' aria-label='Left Align'> <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span> </button>"
     + "<button type='button' id='downgrade-idea' class='btn btn-default' aria-label='Left Align'> <span class='glyphicon glyphicon-thumbs-down' aria-hidden='true'></span> </button>"
     + "</div>"
@@ -97,7 +101,7 @@ function upgradeIdea() {
     var $idea = $(this).closest(".idea")
 
     var ideaParams = {
-      idea: {
+      ideaQualityChange: {
         quality: 1
       }
     }
@@ -124,7 +128,6 @@ function getIdeaQuality(idea_id) {
     type:    "GET",
     url:     "api/v1/ideas/" + idea_id + ".json",
     success: function(idea) {
-      console.log(idea.quality)
       return idea.quality
     },
     error: function(xhr) {
@@ -132,3 +135,74 @@ function getIdeaQuality(idea_id) {
     }
   })
 }
+
+function downgradeIdea() {
+  $('#latest-ideas').delegate('#downgrade-idea', 'click', function() {
+    var $idea = $(this).closest(".idea")
+
+    var ideaParams = {
+      ideaQualityChange: {
+        quality: -1
+      }
+    }
+
+    $.ajax({
+      type:    "POST",
+      url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      data:    { _method:'PUT', ideaParams },
+        success: function() {
+          var newQuality = getIdeaQuality($idea.attr('data-id'))
+          console.log(newQuality)
+          $($idea).find('.quality').text("Quality: " + newQuality)
+        },
+      error: function(xhr) {
+        console.log(xhr.responseText)
+      }
+    })
+  })
+}
+
+function editIdea() {
+  $('#latest-ideas').delegate('#edit-idea', 'click', function() {
+    var $idea = $(this).closest(".idea")
+
+    $idea.append(
+      "<br>"
+      + "<div class='form-group'>"
+      + "<label for='updated-idea-title'>Idea Title:</label>"
+      + "<input class='form-control' type='text' id='updated-idea-title'>"
+      + "<label for='updated-idea-body'>Idea Body:</label>"
+      + "<input class='form-control' type='text' id='updated-idea-body'>"
+      + "<button id='update-idea' name='button-update' class='btn btn-primary'>Save</button>"
+      + "</div>"
+    )
+
+  })
+}
+
+function saveEditedIdea(idea) {
+  $('#latest-ideas').delegate('#update-idea', 'click', function() {
+    var $idea = $(this).closest(".idea")
+
+    var updatedIdeaParams = {
+      updatedIdea: {
+        newTitle: $idea.find('#updated-idea-title').val(),
+        newBody: $idea.find('#updated-idea-body').val()
+      }
+    }
+
+    $.ajax({
+      type:    "POST",
+      url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      data:    { _method:'PUT', updatedIdeaParams },
+        success: function() {
+          var newQuality = getIdeaQuality($idea.attr('data-id'))
+          console.log(newQuality)
+          $($idea).find('.quality').text("Quality: " + newQuality)
+        },
+      error: function(xhr) {
+        console.log(xhr.responseText)
+      }
+    })
+  })
+  };
