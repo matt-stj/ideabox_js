@@ -2,6 +2,7 @@ $(document).ready(function() {
   fetchIdeas();
   createIdea();
   deleteIdea();
+  upgradeIdea();
 })
 
 
@@ -13,12 +14,14 @@ function renderIdea(idea) {
     + idea.title
     + "</h3><h6>Body: "
     + idea.body
-    + "</h5><h6>Quality: "
+    + "</h5><h6 class='quality' >Quality: "
     + idea.quality
-    + "</p><p>Posted at: "
+    + "</h6><p>Posted at: "
     + idea.created_at
     + "</p>"
     + "<button id='delete-idea' name='button-delete' class='btn btn-danger btn-xs'>Delete</button>"
+    + "<button type='button' id='upgrade-idea' class='btn btn-default' aria-label='Left Align'> <span class='glyphicon glyphicon-thumbs-up' aria-hidden='true'></span> </button>"
+    + "<button type='button' id='downgrade-idea' class='btn btn-default' aria-label='Left Align'> <span class='glyphicon glyphicon-thumbs-down' aria-hidden='true'></span> </button>"
     + "</div>"
     )
 }
@@ -81,6 +84,48 @@ function deleteIdea() {
       success: function() {
         $idea.remove()
       },
+      error: function(xhr) {
+        console.log(xhr.responseText)
+      }
+    })
+  })
+}
+
+
+function upgradeIdea() {
+  $('#latest-ideas').delegate('#upgrade-idea', 'click', function() {
+    var $idea = $(this).closest(".idea")
+
+    $.ajax({
+      type: 'POST',
+      url: 'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      success: function() {
+        $idea.remove()
+      },
+      error: function(xhr) {
+        console.log(xhr.responseText)
+      }
+    })
+  })
+}
+
+function upgradeIdea() {
+  $('#latest-ideas').delegate('#upgrade-idea', 'click', function() {
+    var $idea = $(this).closest(".idea")
+
+    var ideaParams = {
+      idea: {
+        quality: 1
+      }
+    }
+
+    $.ajax({
+      type:    "POST",
+      url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      data:    { _method:'PUT', ideaParams },
+        success: function() {
+          $($idea).find('.quality').text("Quality: " + $idea.attr('quality'))
+        },
       error: function(xhr) {
         console.log(xhr.responseText)
       }

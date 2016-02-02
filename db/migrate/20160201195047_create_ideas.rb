@@ -3,7 +3,7 @@ class CreateIdeas < ActiveRecord::Migration
     create_table :ideas do |t|
       t.string :title
       t.string :body
-      t.string :quality, :default => "swill"
+      t.integer :quality, :default => 0
 
       t.timestamps null: false
     end
