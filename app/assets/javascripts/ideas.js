@@ -8,18 +8,29 @@ $(document).ready(function() {
   downgradeIdea();
 })
 
+var qualityValues = {
+  swill: 0,
+  plausible: 1,
+  genius: 2
+}
+
+var qualityTexts = {
+  0: "swill",
+  1: "plausible",
+  2: "genius"
+}
 
 function renderIdea(idea) {
-  $("#latest-ideas").append(
+  $("#latest-ideas").prepend(
     "<div class='idea' data-id='"
     + idea.id
     + "'><h3 class='title'>Title: "
     + idea.title
     + "</h3><h6 class='body'>Body: "
     + idea.body
-    + "</h5><h6 class='quality' >Quality: "
+    + "</h5><h6 class='quality' >Quality: <span class='idea-quality'>"
     + idea.quality
-    + "</h6><p>Posted at: "
+    + "</span></h6><p>Posted at: "
     + idea.created_at
     + "</p>"
     + "<button id='delete-idea' name='button-delete' class='btn btn-danger'>Delete</button>"
@@ -38,7 +49,12 @@ function fetchIdeas() {
     crossDomain: true,
     url:     "api/v1/ideas.json",
     success: function(ideas) {
-      $.each(ideas, function(index, idea) {
+      //  let rails do sorting
+      var sortedIdeas = ideas.sort(function(a,b){
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+
+      $.each(sortedIdeas, function(index, idea) {
         if (isNaN(newestItemID) || idea.id > newestItemID) {
           renderIdea(idea)
         }
@@ -100,21 +116,17 @@ function upgradeIdea() {
   $('#latest-ideas').delegate('#upgrade-idea', 'click', function() {
     var $idea = $(this).closest(".idea")
 
-    var ideaParams = {
-      ideaQualityChange: {
-        quality: 1
-      }
-    }
+    var $quality = $idea.find('.idea-quality');
+    var qualityText = $quality.text();
+    var qualityValue = qualityValues[qualityText];
+
+    if (qualityValue < 2) { qualityValue++; }
 
     $.ajax({
-      type:    "POST",
-      url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
-      data:    { _method:'PUT', ideaParams },
-        success: function() {
-          var newQuality = getIdeaQuality($idea.attr('data-id'))
-          console.log(newQuality)
-          $($idea).find('.quality').text("Quality: " + newQuality)
-        },
+      type:    "PUT",
+      url:     '/api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      data:    { idea: { quality: qualityValue } },
+      success: function () { $quality.text(qualityTexts[qualityValue]); },
       error: function(xhr) {
         console.log(xhr.responseText)
       }
@@ -123,17 +135,19 @@ function upgradeIdea() {
 }
 
 function getIdeaQuality(idea_id) {
+  var newQuality = ""
 
   $.ajax({
     type:    "GET",
     url:     "api/v1/ideas/" + idea_id + ".json",
     success: function(idea) {
-      return idea.quality
+      return newQuality = idea.quality
     },
     error: function(xhr) {
       console.log(xhr.responseText)
     }
   })
+  return newQuality
 }
 
 function downgradeIdea() {
