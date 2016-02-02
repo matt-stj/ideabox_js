@@ -96,23 +96,6 @@ function upgradeIdea() {
   $('#latest-ideas').delegate('#upgrade-idea', 'click', function() {
     var $idea = $(this).closest(".idea")
 
-    $.ajax({
-      type: 'POST',
-      url: 'api/v1/ideas/' + $idea.attr('data-id') + ".json",
-      success: function() {
-        $idea.remove()
-      },
-      error: function(xhr) {
-        console.log(xhr.responseText)
-      }
-    })
-  })
-}
-
-function upgradeIdea() {
-  $('#latest-ideas').delegate('#upgrade-idea', 'click', function() {
-    var $idea = $(this).closest(".idea")
-
     var ideaParams = {
       idea: {
         quality: 1
@@ -124,11 +107,28 @@ function upgradeIdea() {
       url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
       data:    { _method:'PUT', ideaParams },
         success: function() {
-          $($idea).find('.quality').text("Quality: " + $idea.attr('quality'))
+          var newQuality = getIdeaQuality($idea.attr('data-id'))
+          console.log(newQuality)
+          $($idea).find('.quality').text("Quality: " + newQuality)
         },
       error: function(xhr) {
         console.log(xhr.responseText)
       }
     })
+  })
+}
+
+function getIdeaQuality(idea_id) {
+
+  $.ajax({
+    type:    "GET",
+    url:     "api/v1/ideas/" + idea_id + ".json",
+    success: function(idea) {
+      console.log(idea.quality)
+      return idea.quality
+    },
+    error: function(xhr) {
+      console.log(xhr.responseText)
+    }
   })
 }

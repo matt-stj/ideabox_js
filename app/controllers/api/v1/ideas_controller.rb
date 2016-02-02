@@ -27,6 +27,10 @@ class Api::V1::IdeasController < ApplicationController
     render :nothing => true
   end
 
+  def show
+    respond_with Idea.find_by(id: params[:id])
+  end
+
   private
 
   def idea_params
