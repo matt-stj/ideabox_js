@@ -2,13 +2,24 @@
   <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
-      <h1>Idea Box</h1>
+      <h1 class="text-center">Idea Box</h1>
     </div>
     <div class="col-sm-2"></div>
   </div>
+  <br>
+
+  <div class="row">
+    <div class="form-group search container col-md-6 col-md-offset-3">
+      <%= form_tag( id: "seach-form") do %>
+      <%= text_field_tag :search, params[:search], placeholder: "Search for an Idea", class: "form-control col-md-3" %>
+      <% end %>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
+      <h3 class="text-center">Add New Idea</h3>
       <hr>
       <div class="form-group">
         <label for="idea-title">Idea Title:</label>

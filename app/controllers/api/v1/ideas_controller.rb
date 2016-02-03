@@ -21,7 +21,7 @@ class Api::V1::IdeasController < ApplicationController
   end
 
   def update
-    respond_with @idea = Idea.find(params[:id]).update(idea_params)
+    respond_with Idea.find(params[:id]).update(idea_params)
   end
 
   def show

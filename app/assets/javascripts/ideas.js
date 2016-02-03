@@ -6,6 +6,7 @@ $(document).ready(function() {
   saveEditedIdea();
   upgradeIdea();
   downgradeIdea();
+  searchBar();
 })
 
 var qualityValues = {
@@ -24,11 +25,11 @@ function renderIdea(idea) {
   $("#latest-ideas").prepend(
     "<div class='idea' data-id='"
     + idea.id
-    + "'><h3 class='title'>Title: "
+    + "'><h3 class='title'>Title: <span id='idea-title'>"
     + idea.title
-    + "</h3><h6 class='body'>Body: "
+    + "</span></h3><h6 class='body'>Body: <span id='idea-body'>"
     + idea.body
-    + "</h5><h6 class='quality' >Quality: <span class='idea-quality'>"
+    + "</span></h5><h6 class='quality' >Quality: <span class='idea-quality'>"
     + idea.quality
     + "</span></h6><p>Posted at: "
     + idea.created_at
@@ -216,3 +217,26 @@ function saveEditedIdea(idea) {
     })
   })
   };
+
+
+  function searchBar() {
+
+  $("#search").on("keypress", function (e) {
+    if (e.keyCode == 13) {
+      return false;
+    }
+  });
+
+  $("#search").on("keyup", function() {
+    var filter = $(this).val();
+    var ideas = $("#latest-ideas").children()
+    $.each(ideas, function(){
+      if ($(this).find('#idea-title, #idea-body').text().search(new RegExp(filter, "i")) === -1) {
+        $(this).addClass("invisible")
+      }
+      else {
+        $(this).removeClass("invisible")
+      }
+    })
+  })
+}
