@@ -67,7 +67,6 @@ function fetchIdeas() {
   })
 }
 
-
 function createIdea() {
   $("#save-idea").on("click", function() {
     var ideaParams = {
