@@ -51,7 +51,7 @@ function fetchIdeas() {
     success: function(ideas) {
       //  let rails do sorting
       var sortedIdeas = ideas.sort(function(a,b){
-        return new Date(b.created_at) - new Date(a.created_at);
+        return new Date(a.created_at) - new Date(b.created_at);
       });
 
       $.each(sortedIdeas, function(index, idea) {
@@ -134,47 +134,44 @@ function upgradeIdea() {
   })
 }
 
-function getIdeaQuality(idea_id) {
-  var newQuality = ""
-
-  $.ajax({
-    type:    "GET",
-    url:     "api/v1/ideas/" + idea_id + ".json",
-    success: function(idea) {
-      return newQuality = idea.quality
-    },
-    error: function(xhr) {
-      console.log(xhr.responseText)
-    }
-  })
-  return newQuality
-}
-
 function downgradeIdea() {
   $('#latest-ideas').delegate('#downgrade-idea', 'click', function() {
     var $idea = $(this).closest(".idea")
 
-    var ideaParams = {
-      ideaQualityChange: {
-        quality: -1
-      }
-    }
+    var $quality = $idea.find('.idea-quality');
+    var qualityText = $quality.text();
+    var qualityValue = qualityValues[qualityText];
+
+    if (qualityValue > 0) { qualityValue--; }
 
     $.ajax({
-      type:    "POST",
-      url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
-      data:    { _method:'PUT', ideaParams },
-        success: function() {
-          var newQuality = getIdeaQuality($idea.attr('data-id'))
-          console.log(newQuality)
-          $($idea).find('.quality').text("Quality: " + newQuality)
-        },
+      type:    "PUT",
+      url:     '/api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      data:    { idea: { quality: qualityValue } },
+      success: function () { $quality.text(qualityTexts[qualityValue]); },
       error: function(xhr) {
         console.log(xhr.responseText)
       }
     })
   })
 }
+
+
+// function getIdeaQuality(idea_id) {
+//   var newQuality = ""
+//
+//   $.ajax({
+//     type:    "GET",
+//     url:     "api/v1/ideas/" + idea_id + ".json",
+//     success: function(idea) {
+//       return newQuality = idea.quality
+//     },
+//     error: function(xhr) {
+//       console.log(xhr.responseText)
+//     }
+//   })
+//   return newQuality
+// }
 
 function editIdea() {
   $('#latest-ideas').delegate('#edit-idea', 'click', function() {
@@ -199,16 +196,17 @@ function saveEditedIdea(idea) {
     var $idea = $(this).closest(".idea")
 
     var updatedIdeaParams = {
-      updatedIdea: {
-        newTitle: $idea.find('#updated-idea-title').val(),
-        newBody: $idea.find('#updated-idea-body').val()
+      idea: {
+        title: $idea.find('#updated-idea-title').val(),
+        body: $idea.find('#updated-idea-body').val()
       }
     }
 
     $.ajax({
-      type:    "POST",
+      type:    "PUT",
       url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
-      data:    { _method:'PUT', updatedIdeaParams },
+      data:    { idea: { title: $idea.find('#updated-idea-title').val(),
+                          body: $idea.find('#updated-idea-body').val() } },
         success: function() {
           console.log("successfully updated!")
         },

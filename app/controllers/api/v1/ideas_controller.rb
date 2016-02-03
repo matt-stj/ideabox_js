@@ -21,9 +21,7 @@ class Api::V1::IdeasController < ApplicationController
   end
 
   def update
-    params[:idea][:quality] = params[:idea][:quality].to_i
-    @idea = Idea.find(params[:id]).update(idea_params)
-    render :nothing => true
+    respond_with @idea = Idea.find(params[:id]).update(idea_params)
   end
 
   def show
@@ -33,6 +31,7 @@ class Api::V1::IdeasController < ApplicationController
   private
 
   def idea_params
+    params[:idea][:quality] = params[:idea][:quality].to_i
     params.require(:idea).permit(:title, :body, :quality)
   end
 
