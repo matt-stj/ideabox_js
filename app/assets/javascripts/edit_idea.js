@@ -4,7 +4,7 @@ function editIdea() {
 
     $idea.append(
       "<br>"
-      + "<div class='form-group'>"
+      + "<div class='form-group edit-form'>"
       + "<label for='updated-idea-title'>Idea Title:</label>"
       + "<input class='form-control' type='text' id='updated-idea-title'>"
       + "<label for='updated-idea-body'>Idea Body:</label>"
@@ -19,21 +19,22 @@ function editIdea() {
 function saveEditedIdea(idea) {
   $('#latest-ideas').delegate('#update-idea', 'click', function() {
     var $idea = $(this).closest(".idea")
+    var $ideaTitle = $idea.find('#idea-title')
+    var $ideaBody = $idea.find('#idea-body')
 
-    var updatedIdeaParams = {
-      idea: {
-        title: $idea.find('#updated-idea-title').val(),
-        body: $idea.find('#updated-idea-body').val()
-      }
-    }
+    var $newTitle = $idea.find('#updated-idea-title').val()
+    var $newBody = $idea.find('#updated-idea-body').val()
 
     $.ajax({
       type:    "PUT",
       url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
-      data:    { idea: { title: $idea.find('#updated-idea-title').val(),
-                          body: $idea.find('#updated-idea-body').val() } },
+      data:    { idea: { title: $newTitle,
+                          body: $newBody } },
         success: function() {
-          console.log("successfully updated!")
+          $ideaTitle.text($newTitle),
+          $ideaBody.text($newBody),
+          $idea.find('.edit-form').empty()
+
         },
       error: function(xhr) {
         console.log(xhr.responseText)

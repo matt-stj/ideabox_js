@@ -1,9 +1,12 @@
 function createIdea() {
   $("#save-idea").on("click", function() {
+    var formTitle = $("#form-idea-title")
+    var formBody = $("#form-idea-body")
+
     var ideaParams = {
       idea: {
-        title: $("#idea-title").val(),
-        body: $("#idea-body").val()
+        title: formTitle.val(),
+        body: formBody.val()
       }
     }
 
@@ -13,8 +16,9 @@ function createIdea() {
       data:    ideaParams,
       success: function(newIdea) {
         renderIdea(newIdea)
-        $("#idea-body").val(""),
-        $("#idea-title").val("")
+        formTitle.val(""),
+        formBody.val("")
+
       },
       error: function(xhr) {
         console.log(xhr.responseText)

@@ -7,4 +7,6 @@ $(document).ready(function() {
   upgradeIdea();
   downgradeIdea();
   searchBar();
+  inlineEditTitle();
+  inlineEditBody();
 })
