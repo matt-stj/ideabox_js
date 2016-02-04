@@ -1,18 +1,13 @@
 require 'test_helper'
 
 class UpgradeIdeaTest < ActionDispatch::IntegrationTest
-  attr_reader :timestamp, :idea
-
+  attr_reader :idea
+  
   def setup
     Capybara.current_driver = :selenium
-    @timestamp = Time.now
-    visit "/"
+    create_idea("UpgradeableIdea - title", "UpgradeableIdea - body")
 
-    fill_in 'form-idea-title', :with => "NewTitle #{@timestamp}"
-    fill_in 'form-idea-body', :with => "NewBody #{@timestamp}"
-    click_link_or_button('save-idea')
-
-    @idea = Idea.find_by(title: "NewTitle #{@timestamp}")
+    @idea = Idea.find_by(title: "UpgradeableIdea - title")
   end
 
   def teardown
@@ -23,13 +18,13 @@ class UpgradeIdeaTest < ActionDispatch::IntegrationTest
   test 'test user can upgrade idea' do
 
     within('#latest-ideas') do
-      assert page.has_content?("NewTitle #{timestamp}")
-      assert page.has_content?("NewBody #{timestamp}")
+      assert page.has_content?("UpgradeableIdea - title")
+      assert page.has_content?("UpgradeableIdea - body")
       assert page.has_content?("Quality: swill")
     end
 
-    assert_equal @idea.title, "NewTitle #{timestamp}"
-    assert_equal @idea.body, "NewBody #{timestamp}"
+    assert_equal @idea.title, "UpgradeableIdea - title"
+    assert_equal @idea.body, "UpgradeableIdea - body"
     assert_equal @idea.quality, "swill"
 
     first('.idea').click_link_or_button('upgrade-idea')
@@ -43,5 +38,6 @@ class UpgradeIdeaTest < ActionDispatch::IntegrationTest
     most_recently_updated_idea = Idea.order(:updated_at).last
 
     assert_equal most_recently_updated_idea.quality, "plausible"
+    delete_newest_idea
   end
 end

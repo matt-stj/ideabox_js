@@ -9,16 +9,8 @@
   <br>
 
   <div class="row">
-    <div class="form-group search container col-md-6 col-md-offset-3">
-      <%= form_tag( id: "seach-form") do %>
-      <%= text_field_tag :search, params[:search], placeholder: "Search for an Idea", class: "form-control col-md-3" %>
-      <% end %>
-    </div>
-  </div>
-
-  <div class="row">
     <div class="col-sm-2"></div>
-    <div class="col-sm-8">
+    <div class="col-sm-6 col-md-offset-1">
       <h3 class="text-center">Add New Idea</h3>
       <hr>
       <div class="form-group">
@@ -27,9 +19,18 @@
         <label for="idea-body">Idea Body:</label>
         <input class="form-control" type="text" id="form-idea-body">
       </div>
-      <input class="btn btn-default pull-right" id="save-idea" type="button" name="submit" value="Save">
+      <input class="btn btn-success pull-right" id="save-idea" type="button" name="submit" value="Save">
     </div>
     <div class="col-sm-2"></div>
+  </div>
+
+  <div class="row">
+    <div class="form-group search container col-md-6 col-md-offset-3">
+      <br>
+      <%= form_tag( id: "seach-form") do %>
+      <%= text_field_tag :search, params[:search], placeholder: "Search for an Idea", class: "form-control col-md-3" %>
+      <% end %>
+    </div>
   </div>
 
   <div class="row">
