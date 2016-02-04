@@ -24,8 +24,10 @@ class AddAndRemoveIeaTest < ActionDispatch::IntegrationTest
       assert page.has_content?("NewBody #{timestamp}")
     end
 
-    assert_equal Idea.last.title, "NewTitle #{timestamp}"
-    assert_equal Idea.last.body, "NewBody #{timestamp}"
+    idea = Idea.find_by(title: "NewTitle #{timestamp}")
+
+    assert_equal idea.title, "NewTitle #{timestamp}"
+    assert_equal idea.body, "NewBody #{timestamp}"
 
   end
 
