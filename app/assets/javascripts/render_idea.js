@@ -1,6 +1,6 @@
 function renderIdea(idea) {
   $("#latest-ideas").prepend(
-    "<div class='idea well text-center pagination-centered' data-id='"
+    "<div class='idea well text-center pagination-centered' data-title='"+ idea.title +"' data-id='"
     + idea.id
     + "'><h3 class='title'>Title: <span contentEditable=true id='idea-title'>"
     + idea.title
