@@ -1,9 +1,6 @@
 require 'test_helper'
 
-class IdeasIndexTest < ActionDispatch::IntegrationTest
-  def setup
-    DatabaseCleaner.start
-  end
+class AddAndRemoveIeaTest < ActionDispatch::IntegrationTest
 
   def teardown
     super
