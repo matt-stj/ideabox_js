@@ -92,16 +92,15 @@ class Api::V1::IdeasControllerTest < ActionController::TestCase
   test "#update can increment quality" do
     assert_equal "swill", idea.quality
 
-    get :update, format: :json, id: idea.id, ideaParams: {"ideaQualityChange"=>{"quality"=>"1"}}
+    get :update, format: :json, id: idea.id, idea: {"quality"=>"1"}
 
     assert_equal "plausible", idea.reload.quality
   end
 
   test "#update can decrement quality" do
-    skip  
     idea.quality = 1
 
-    get :update, format: :json, id: idea.id, ideaParams: {"ideaQualityChange"=>{"quality"=>"-1"}}
+    get :update, format: :json, id: idea.id, idea: {"quality"=>"0"}
 
     assert_equal "swill", idea.reload.quality
   end
