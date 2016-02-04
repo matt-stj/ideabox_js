@@ -9,7 +9,7 @@ function renderIdea(idea) {
     + "</span></h5><h4 class='quality' >Quality: <span class='idea-quality'>"
     + idea.quality
     + "</span></h4><p>Posted: "
-    + timeSince(new Date(idea.created_at))
+    + timeSince(new Date(idea.created_at).getTime() - 2000)
     + " ago"
     + "</p>"
     + "<button id='delete-idea' name='button-delete' class='btn btn-danger'>Delete</button>"

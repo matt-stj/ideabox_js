@@ -11,7 +11,7 @@ class Api::V1::IdeasController < ApplicationController
     if @idea.save
       respond_with :api, :v1, @idea
     else
-      # how to handle AJAX error?
+      flash.now[:alert] = "There was an error"
     end
   end
 
