@@ -105,5 +105,31 @@ class Api::V1::IdeasControllerTest < ActionController::TestCase
     assert_equal "swill", idea.reload.quality
   end
 
+  test "#update can edit title" do
+    idea.title = "old title"
+
+    get :update, format: :json, id: idea.id, idea: {"title"=>"new title"}
+
+    assert_equal "new title", idea.reload.title
+  end
+
+  test "#update can edit body" do
+    idea.body = "old body"
+
+    get :update, format: :json, id: idea.id, idea: {"body"=>"new body"}
+
+    assert_equal "new body", idea.reload.body
+  end
+
+  test "#update can edit title and body" do
+    idea.title = "old title"
+    idea.body = "old body"
+
+    get :update, format: :json, id: idea.id, idea: {"title"=>"new title", "body"=>"new body"}
+
+    assert_equal "new title", idea.reload.title
+    assert_equal "new body", idea.reload.body
+  end
+
 
 end
