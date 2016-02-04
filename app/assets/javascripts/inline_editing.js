@@ -3,7 +3,6 @@ function inlineEditTitle() {
 
     var enterKeyPress = event.which == 13
 
-
     if (enterKeyPress) {
       var $idea = $(this).closest(".idea")
       var $title = $idea.find('#idea-title').text()
