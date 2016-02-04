@@ -4,7 +4,7 @@ function fetchIdeas() {
   $.ajax({
     type:    "GET",
     crossDomain: true,
-    url:     "api/v1/ideas.json",
+    url:     "/api/v1/ideas.json",
     success: function(ideas) {
       var sortedIdeas = ideas.sort(function(a,b){
         return new Date(a.created_at) - new Date(b.created_at);

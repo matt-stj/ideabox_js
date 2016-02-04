@@ -4,7 +4,7 @@ function deleteIdea() {
 
     $.ajax({
       type: 'DELETE',
-      url: 'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      url: '/api/v1/ideas/' + $idea.attr('data-id') + ".json",
       success: function() {
         $idea.remove()
       },

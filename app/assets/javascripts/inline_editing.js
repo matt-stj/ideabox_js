@@ -13,7 +13,7 @@ function inlineEditTitle() {
 
       $.ajax({
         type:    "PUT",
-        url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+        url:     '/api/v1/ideas/' + $idea.attr('data-id') + ".json",
         data:    { idea: { title: $title } },
         success: function() {
           console.log("successfully updated!")
@@ -42,7 +42,7 @@ function inlineEditBody() {
 
       $.ajax({
         type:    "PUT",
-        url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+        url:     '/api/v1/ideas/' + $idea.attr('data-id') + ".json",
         data:    { idea: { body: $body } },
         success: function() {
           console.log("successfully updated!")

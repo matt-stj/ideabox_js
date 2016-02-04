@@ -27,7 +27,7 @@ function saveEditedIdea(idea) {
 
     $.ajax({
       type:    "PUT",
-      url:     'api/v1/ideas/' + $idea.attr('data-id') + ".json",
+      url:     '/api/v1/ideas/' + $idea.attr('data-id') + ".json",
       data:    { idea: { title: $newTitle,
                           body: $newBody } },
         success: function() {
