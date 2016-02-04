@@ -42,7 +42,7 @@ class UpgradeIdeaTest < ActionDispatch::IntegrationTest
   end
 
 
-    test 'test user cant upgrade idea beyon genius' do
+    test 'test user cant upgrade idea beyond genius' do
 
       within('#latest-ideas') do
         assert page.has_content?("UpgradeableIdea - title")
