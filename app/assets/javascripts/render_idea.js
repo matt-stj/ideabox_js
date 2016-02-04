@@ -5,7 +5,7 @@ function renderIdea(idea) {
     + "'><h3 class='title'>Title: <span contentEditable=true id='idea-title'>"
     + idea.title
     + "</span></h3><h6 class='body'>Body: <span contentEditable=true id='idea-body'>"
-    + idea.body
+    + truncate(idea.body)
     + "</span></h5><h4 class='quality' >Quality: <span class='idea-quality'>"
     + idea.quality
     + "</span></h4><p>Posted: "
