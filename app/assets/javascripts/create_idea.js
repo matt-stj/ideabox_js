@@ -6,7 +6,8 @@ function createIdea() {
     var ideaParams = {
       idea: {
         title: formTitle.val(),
-        body: formBody.val()
+        body: formBody.val(),
+        quality: 'swill'
       }
     }
 
